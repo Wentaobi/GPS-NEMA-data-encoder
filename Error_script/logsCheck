@@ -1,0 +1,62 @@
+#!/bin/bash
+## process logs from logging drives deployed in the automated vehicles
+
+
+# function that prints usage of this script
+function printUsage {
+    echo "Publisher: wen, version 1.0"
+    echo ""
+    echo "Usage: logsCheck [Options] "
+    echo "  -wen or -w: extract errors in logging"
+    echo "  -help or -h: more details of scripts " 
+    echo ""
+    echo "Working Example:"
+    echo "  Terminal: logsCheck -wen"
+    echo "... will process Error loggings and send it to Desktop" 
+    echo ""
+}
+
+# run logs function
+function runlog {
+    rm -rf ~/Desktop/ErrorTest*
+    python3 /home/user/Desktop/log_script.py
+    cp /home/user/Desktop/check/Error* ~/Desktop 
+}
+
+
+# if there are no arguments
+if [ $# -eq 0 ]; then
+    printUsage
+    exit 1
+fi
+
+# parse command line options
+while [ "$1" != "" ]; do
+    PARAM=`echo $1 | awk -F= '{print $1}'`
+    VALUE=`echo $1 | awk -F= '{print $2}'`
+    case $PARAM in
+        -h | -help)
+            echo ""
+            echo "************ Afflatus *************"
+            echo "Actually, I develop this bash code in the mid-night when I was at home"
+            echo "For AD OEM Vehicle team use only, other team use should get premission"
+            echo "or sign NDA from Wen. If I do not answer u, you can just use it for sure"
+            echo ""
+            echo "have fun!"
+            echo ""
+            printUsage
+            exit
+            ;;
+        -w | -wen)
+            runlog
+            ;;
+        *)
+            echo "ERROR: unknown parameter \"$PARAM\""
+            echo ""
+            printUsage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
